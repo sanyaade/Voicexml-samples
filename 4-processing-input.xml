@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml version = "2.1" >
+  <form>
+    <block>
+      <prompt>
+        Thanks for calling Strato Pizza.
+      </prompt>
+    </block>
+   
+    <field name="topping">
+      What topping would you like on your pizza today?
+
+      <grammar type="text/gsl">
+        <![CDATA[
+          ;Lines starting with a semicolon are comments.
+          ;Match one of the enclosed terms
+          [
+            ;Terms are separated by a space
+            pepperoni olives sausage anchovies
+
+
+            ;They can also be on separate lines.
+            ; Each line is recognized as a separate term
+            onions
+            peppers
+
+            ;Parentheses require all of the enclosed terms
+            ;to be matched. A logical AND
+            (extra cheese) (roasted garlic)
+
+            ;Square brackets are the same as OR
+            [mushrooms portobello]
+
+            ;You can mix AND & OR together
+            [ham (canadian bacon)]
+          ]
+        ]]>
+      </grammar>
+      <!-- The caller was silent, restart the field -->
+      <noinput>
+        I did not hear anything.  Please try again.
+        <reprompt/>
+      </noinput>
+
+      <!-- The caller said something that was not defined in our grammar -->
+      <nomatch>
+        I did not recognize that topping. Please try again.
+        <reprompt/>
+      </nomatch>
+    </field>
+    
+    <field name="phone" type="phone">
+      Please say or enter your phone number.
+
+      <noinput>
+        <reprompt/>
+      </noinput>
+
+      <nomatch>
+        I didn't understand that. Please try again.
+        <reprompt/>
+      </nomatch>
+    </field>
+    
+    <block>
+      <prompt>
+        You ordered <value expr="topping$.utterance"/> on your pizza. If we have any questions we will call you at <value expr="phone$.utterance"/>. Thank you for your order.
+      </prompt>
+    </block>
+  </form>
+</vxml>
